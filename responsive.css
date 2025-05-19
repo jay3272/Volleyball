@@ -1,0 +1,234 @@
+/**
+ * 皮卡丘打排球遊戲 - 響應式設計樣式表
+ * responsive.css
+ * 
+ * 包含針對不同設備和屏幕尺寸的響應式樣式
+ */
+
+/* --------------------------------------
+ * 1. 通用響應式調整
+ * -------------------------------------- */
+
+/* 根據寬高比自適應畫布大小 */
+@media (min-aspect-ratio: 16/9) {
+  #game-canvas {
+    height: 90%;
+    width: auto;
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  #game-canvas {
+    width: 90%;
+    height: auto;
+  }
+}
+
+/* --------------------------------------
+ * 2. 平板設備 (768px ~ 1024px)
+ * -------------------------------------- */
+@media screen and (max-width: 1024px) {
+  /* 調整字體大小 */
+  .screen h2 {
+    font-size: calc(var(--text-xxl) * 0.9);
+  }
+  
+  .screen h3 {
+    font-size: calc(var(--text-large) * 0.9);
+  }
+  
+  /* 縮小Logo */
+  .game-logo {
+    max-width: 400px;
+  }
+  
+  /* 調整菜單按鈕 */
+  .menu-container {
+    max-width: 300px;
+  }
+  
+  .menu-btn {
+    height: calc(var(--button-height) * 0.9);
+    font-size: calc(var(--text-large) * 0.9);
+  }
+  
+  /* 調整控制指南佈局 */
+  .control-guide {
+    gap: var(--spacing-medium);
+  }
+}
+
+/* --------------------------------------
+ * 3. 手機設備 (小於768px)
+ * -------------------------------------- */
+@media screen and (max-width: 767px) {
+  /* 進一步調整字體大小 */
+  .screen h2 {
+    font-size: calc(var(--text-xxl) * 0.8);
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  .screen h3 {
+    font-size: calc(var(--text-large) * 0.8);
+  }
+  
+  .screen p {
+    font-size: calc(var(--text-normal) * 0.9);
+  }
+  
+  /* 更小的Logo */
+  .game-logo {
+    max-width: 300px;
+  }
+  
+  /* 調整間距 */
+  .screen {
+    padding: var(--spacing-medium);
+  }
+  
+  /* 更窄的菜單 */
+  .menu-container {
+    max-width: 250px;
+  }
+  
+  /* 調整説明內容 */
+  .help-content {
+    padding: var(--spacing-medium);
+  }
+  
+  /* 控制指南改為縱向 */
+  .control-guide {
+    flex-direction: column;
+    gap: var(--spacing-medium);
+  }
+  
+  /* 調整遊戲UI */
+  #game-ui {
+    padding: calc(var(--spacing-small) * 1.5);
+  }
+  
+  #score-display {
+    padding: 3px 10px;
+  }
+  
+  #player1-score, #player2-score, #score-divider {
+    font-size: calc(var(--text-xl) * 0.8);
+  }
+  
+  #timer {
+    padding: 3px 10px;
+    font-size: calc(var(--text-normal) * 0.9);
+  }
+  
+  #pause-btn {
+    width: 35px;
+    height: 35px;
+  }
+  
+  /* 調整移動控制區 */
+  #mobile-controls {
+    height: 120px;
+  }
+  
+  .control-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* --------------------------------------
+ * 4. 小型手機 (小於480px)
+ * -------------------------------------- */
+@media screen and (max-width: 479px) {
+  /* 最小字體大小 */
+  .screen h2 {
+    font-size: calc(var(--text-xxl) * 0.7);
+  }
+  
+  /* 最小Logo */
+  .game-logo {
+    max-width: 250px;
+  }
+  
+  /* 縮小控制按鈕 */
+  .control-btn {
+    width: 45px;
+    height: 45px;
+  }
+  
+  /* 調整遊戲結束畫面 */
+  #win-message {
+    font-size: calc(var(--text-xxl) * 0.7);
+  }
+  
+  #final-score {
+    font-size: 45px;
+  }
+}
+
+/* --------------------------------------
+ * 5. 橫屏模式 (手機橫放)
+ * -------------------------------------- */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  /* 調整開始畫面 */
+  .logo-container {
+    margin-bottom: var(--spacing-small);
+  }
+  
+  .game-logo {
+    max-width: 200px;
+  }
+  
+  .menu-container {
+    max-width: 250px;
+  }
+  
+  /* 放小控制區高度 */
+  #mobile-controls {
+    height: 90px;
+  }
+  
+  .control-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* 調整選項畫面 */
+  .option-group {
+    margin-bottom: var(--spacing-small);
+  }
+}
+
+/* --------------------------------------
+ * 6. 大型屏幕優化 (大於1920px)
+ * -------------------------------------- */
+@media screen and (min-width: 1921px) {
+  /* 增大按鈕尺寸 */
+  .menu-btn {
+    height: calc(var(--button-height) * 1.2);
+    font-size: calc(var(--text-large) * 1.2);
+  }
+  
+  /* 調整標題大小 */
+  .screen h2 {
+    font-size: calc(var(--text-xxl) * 1.2);
+  }
+  
+  /* 增大控制按鈕 */
+  .control-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+}
+
+/* --------------------------------------
+ * 7. 針對不同像素密度的調整
+ * -------------------------------------- */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* 處理高DPI螢幕 */
+  #game-canvas {
+    image-rendering: auto;
+  }
+}
