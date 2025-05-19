@@ -1,0 +1,618 @@
+/**
+ * 皮卡丘打排球遊戲 - 主要樣式表
+ * main.css
+ * 
+ * 包含遊戲基本樣式、布局和通用元素樣式
+ */
+
+/* --------------------------------------
+ * 1. 基礎樣式和重置
+ * -------------------------------------- */
+@font-face {
+  font-family: 'GameFont';
+  src: url('../assets/fonts/game-font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* 主色調 */
+  --pikachu-yellow: #ffcb05;
+  --pokemon-blue: #3b4cca;
+  --pokemon-red: #ff0000;
+  --pokemon-light-blue: #73b9e5;
+  --grass-green: #9de0ad;
+  --sky-blue: #87ceeb;
+  
+  /* 中性色 */
+  --white: #ffffff;
+  --light-gray: #f0f0f0;
+  --gray: #a0a0a0;
+  --dark-gray: #333333;
+  --black: #000000;
+  
+  /* 功能色 */
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  
+  /* 字體和大小 */
+  --main-font: 'GameFont', 'Arial', sans-serif;
+  --text-normal: 16px;
+  --text-small: 14px;
+  --text-large: 24px;
+  --text-xl: 32px;
+  --text-xxl: 48px;
+  
+  /* 其他尺寸 */
+  --border-radius: 8px;
+  --button-height: 50px;
+  --spacing-small: 10px;
+  --spacing-medium: 20px;
+  --spacing-large: 30px;
+  
+  /* 動畫時間 */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
+  --transition-slow: 0.5s;
+  
+  /* 陰影 */
+  --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-normal: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-strong: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--main-font);
+  background-color: var(--sky-blue);
+  color: var(--dark-gray);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: none; /* 禁用瀏覽器默認觸控行為 */
+}
+
+/* 防止長按選單和拖曳 */
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+button, input, select {
+  font-family: var(--main-font);
+}
+
+/* 移除觸控裝置點擊時的高亮 */
+a, button, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --------------------------------------
+ * 2. 遊戲容器和畫布
+ * -------------------------------------- */
+#game-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated; /* 像素藝術優化 */
+  image-rendering: crisp-edges;
+  background-color: transparent;
+  z-index: 1;
+}
+
+/* 根據寬高比自適應畫布大小 */
+@media (min-aspect-ratio: 16/9) {
+  #game-canvas {
+    height: 90%;
+    width: auto;
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  #game-canvas {
+    width: 90%;
+    height: auto;
+  }
+}
+
+/* --------------------------------------
+ * 3. 遊戲畫面 (screens)
+ * -------------------------------------- */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  padding: var(--spacing-large);
+  color: var(--white);
+  text-align: center;
+}
+
+.screen h2 {
+  font-size: var(--text-xxl);
+  margin-bottom: var(--spacing-large);
+  color: var(--pikachu-yellow);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.screen h3 {
+  font-size: var(--text-large);
+  margin-bottom: var(--spacing-medium);
+  color: var(--pokemon-light-blue);
+}
+
+.screen p {
+  font-size: var(--text-normal);
+  margin-bottom: var(--spacing-medium);
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 開始畫面 */
+#start-screen {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+              url('../assets/images/background/start-bg.jpg') center/cover no-repeat;
+}
+
+.logo-container {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: var(--spacing-large);
+}
+
+.game-logo {
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  gap: var(--spacing-medium);
+}
+
+/* 幫助畫面 */
+.help-content {
+  max-width: 800px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: var(--spacing-large);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-large);
+  text-align: left;
+}
+
+.control-guide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: var(--spacing-medium) 0;
+  gap: var(--spacing-large);
+}
+
+.player-controls {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius);
+  min-width: 200px;
+}
+
+.player-controls h4 {
+  color: var(--pikachu-yellow);
+  margin-bottom: var(--spacing-small);
+  font-size: var(--text-normal);
+}
+
+/* 選項畫面 */
+.option-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: var(--spacing-large);
+}
+
+.option-group label {
+  margin-bottom: var(--spacing-small);
+  font-size: var(--text-normal);
+  width: 100%;
+  text-align: left;
+}
+
+.control-options {
+  display: flex;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.control-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 遊戲結束畫面 */
+#win-message {
+  font-size: var(--text-xxl);
+  color: var(--pikachu-yellow);
+  margin-bottom: var(--spacing-medium);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+#final-score {
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: var(--spacing-large);
+  color: var(--white);
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* --------------------------------------
+ * 4. 按鈕樣式
+ * -------------------------------------- */
+.menu-btn {
+  width: 100%;
+  height: var(--button-height);
+  background-color: var(--pokemon-blue);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--text-large);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-normal);
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+.menu-btn:hover {
+  background-color: #4a5be0;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+}
+
+.menu-btn:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-light);
+}
+
+/* 按鈕動畫效果 */
+.menu-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.menu-btn:focus::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0) translate(-50%, -50%);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(30, 30) translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+.back-btn {
+  background-color: var(--gray);
+  width: auto;
+  min-width: 150px;
+  margin-top: var(--spacing-medium);
+}
+
+.back-btn:hover {
+  background-color: var(--dark-gray);
+}
+
+/* --------------------------------------
+ * 5. 遊戲UI元素
+ * -------------------------------------- */
+#game-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--spacing-medium);
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#score-display {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 5px 15px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+}
+
+#player1-score, #player2-score {
+  font-size: var(--text-xl);
+  font-weight: bold;
+  color: var(--white);
+  min-width: 30px;
+  text-align: center;
+}
+
+#player1-score {
+  color: var(--pikachu-yellow);
+}
+
+#player2-score {
+  color: var(--pokemon-light-blue);
+}
+
+#score-divider {
+  font-size: var(--text-xl);
+  color: var(--white);
+  margin: 0 10px;
+}
+
+#timer {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--white);
+  padding: 5px 15px;
+  border-radius: var(--border-radius);
+  font-size: var(--text-normal);
+  box-shadow: var(--shadow-light);
+}
+
+#pause-btn {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background-image: url('../assets/images/ui/pause.png');
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: var(--shadow-light);
+  transition: background-color var(--transition-fast);
+}
+
+#pause-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* --------------------------------------
+ * 6. 表單元素樣式
+ * -------------------------------------- */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--light-gray);
+  outline: none;
+  margin: 10px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--pokemon-blue);
+  cursor: pointer;
+  border: 2px solid var(--white);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--pokemon-blue);
+  cursor: pointer;
+  border: 2px solid var(--white);
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  background-color: var(--white);
+  border: 2px solid var(--light-gray);
+  font-size: var(--text-normal);
+  cursor: pointer;
+  outline: none;
+}
+
+select:focus {
+  border-color: var(--pokemon-blue);
+}
+
+/* --------------------------------------
+ * 7. 移動設備觸控控制
+ * -------------------------------------- */
+#mobile-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-medium);
+}
+
+#left-controls, #right-controls {
+  display: flex;
+  align-items: center;
+}
+
+#left-dpad, #right-dpad {
+  display: flex;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.control-btn {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: var(--white);
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.jump-btn {
+  background-color: rgba(59, 76, 202, 0.7);
+}
+
+.special-btn {
+  background-color: rgba(255, 0, 0, 0.7);
+}
+
+.control-btn:active {
+  transform: scale(0.9);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* --------------------------------------
+ * 8. 動畫效果
+ * -------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.fade-out {
+  animation: fadeOut var(--transition-normal) forwards;
+}
+
+.slide-up {
+  animation: slideUp var(--transition-normal) forwards;
+}
+
+/* --------------------------------------
+ * 9. 實用工具類
+ * -------------------------------------- */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: var(--spacing-small); }
+.mt-2 { margin-top: var(--spacing-medium); }
+.mt-3 { margin-top: var(--spacing-large); }
+
+.mb-1 { margin-bottom: var(--spacing-small); }
+.mb-2 { margin-bottom: var(--spacing-medium); }
+.mb-3 { margin-bottom: var(--spacing-large); }
+
+.yellow-text { color: var(--pikachu-yellow); }
+.blue-text { color: var(--pokemon-blue); }
+.red-text { color: var(--pokemon-red); }
+
+/* --------------------------------------
+ * 10. 輔助功能和可訪問性
+ * -------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* 減少動態效果以幫助有前庭障礙的用戶 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
